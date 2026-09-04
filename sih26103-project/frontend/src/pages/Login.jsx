@@ -1,19 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    console.log("Login attempted:", {
-      email,
-      password,
-    });
-
-    alert("Login button working!");
-  };
+  navigate("/dashboard");
+};
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
