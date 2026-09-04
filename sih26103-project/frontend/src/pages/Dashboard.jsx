@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import {
   LayoutDashboard,
   FolderKanban,
@@ -8,50 +10,6 @@ import {
   MapPin,
   CalendarDays,
 } from "lucide-react";
-
-const projects = [
-  {
-    id: "PRJ-001",
-    name: "Government School Construction",
-    location: "Indore, Madhya Pradesh",
-    progress: 78,
-    status: "Ongoing",
-    deadline: "30 Sep 2026",
-  },
-  {
-    id: "PRJ-002",
-    name: "Rural Road Development",
-    location: "Dewas, Madhya Pradesh",
-    progress: 42,
-    status: "Delayed",
-    deadline: "15 Sep 2026",
-  },
-  {
-    id: "PRJ-003",
-    name: "Community Health Center",
-    location: "Ujjain, Madhya Pradesh",
-    progress: 91,
-    status: "Ongoing",
-    deadline: "10 Oct 2026",
-  },
-  {
-    id: "PRJ-004",
-    name: "Water Supply Pipeline",
-    location: "Dhar, Madhya Pradesh",
-    progress: 100,
-    status: "Completed",
-    deadline: "25 Aug 2026",
-  },
-  {
-    id: "PRJ-005",
-    name: "Smart Village Development",
-    location: "Khandwa, Madhya Pradesh",
-    progress: 25,
-    status: "At Risk",
-    deadline: "20 Oct 2026",
-  },
-];
-
 function StatusBadge({ status }) {
   const styles = {
     Ongoing: "bg-blue-100 text-blue-700",
@@ -72,6 +30,14 @@ function StatusBadge({ status }) {
 }
 
 function Dashboard() {
+    const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/projects")
+      .then((response) => response.json())
+      .then((data) => setProjects(data))
+      .catch((error) => console.error("Error fetching projects:", error));
+  }, []);
   return (
     <div className="min-h-screen bg-slate-100 flex">
 
@@ -164,7 +130,7 @@ function Dashboard() {
                   </p>
 
                   <h3 className="text-3xl font-bold text-slate-800 mt-2">
-                    5
+                    {projects.length}
                   </h3>
                 </div>
 
@@ -183,7 +149,7 @@ function Dashboard() {
                   </p>
 
                   <h3 className="text-3xl font-bold text-slate-800 mt-2">
-                    2
+                    {projects.filter((project) => project.status === "Ongoing").length}
                   </h3>
                 </div>
 
@@ -202,7 +168,7 @@ function Dashboard() {
                   </p>
 
                   <h3 className="text-3xl font-bold text-slate-800 mt-2">
-                    1
+                    {projects.filter((project) => project.status === "Completed").length}
                   </h3>
                 </div>
 
@@ -221,7 +187,9 @@ function Dashboard() {
                   </p>
 
                   <h3 className="text-3xl font-bold text-slate-800 mt-2">
-                    2
+                    {projects.filter(
+  (project) => project.status === "Delayed" || project.status === "At Risk"
+).length}
                   </h3>
                 </div>
 
